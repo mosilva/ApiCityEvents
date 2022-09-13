@@ -1,3 +1,4 @@
+using ApiCityEvents.Core.Interface;
 using ApiCityEvents.Core.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,13 +12,29 @@ namespace ApiCityEvents.Controllers
 
         public CityEvent cityEvent;
 
+        private readonly ICityEventService _cityEventService;
+
+        public CityEventsController(ICityEventService cityEventService)            
+        {
+            _cityEventService = cityEventService;
+        }
+
 
         [HttpPost("/CreateNewCityEvent")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<CityEvent> CreateCityEvent(CityEvent city)
+        public ActionResult<CityEvent> CreateCityEvent(CityEvent cityEvent)
         {
+            if (!(_cityEventService.CheckConflictCityEventInsert(cityEvent)))
+            {
+                return Conflict();
+            }
+
+            if (!(_cityEventService.CreateCityEvent(cityEvent))){
+
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
 
             return CreatedAtAction(nameof(CreateCityEvent),cityEvent);
 
