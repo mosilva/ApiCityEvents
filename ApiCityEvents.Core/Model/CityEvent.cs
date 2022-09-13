@@ -8,39 +8,39 @@ namespace ApiCityEvents.Core.Model
     {
         //public long idEvent { get; set; }
 
-        [Required(ErrorMessage = "The Title is Required")]
+        [Required(ErrorMessage = "The Title is Required", AllowEmptyStrings = false)]
         [StringLength(100, MinimumLength = 3)]
         [DisplayName("Title")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [MaxLength(200)]
         [DisplayName("Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
 
         [Required(ErrorMessage = "The Date Hour Event is Required")]
         [Column(TypeName = "datetime")]
         [DisplayName("Date Hour Event")]
-        public string DateHourEvent { get; set; }
+        public DateTime? DateHourEvent { get; set; }
 
-        [Required(ErrorMessage = "The Local Event is Required")]
+        [Required(ErrorMessage = "The Local Event is Required", AllowEmptyStrings = false)]
         [StringLength(100, MinimumLength = 2)]
         [DisplayName("Local Event")]
-        public string Local { get; set; }
+        public string? Local { get; set; }
 
         [StringLength(200, MinimumLength = 5)]
         [DisplayName("Address")]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}")]
         [DataType(DataType.Currency)]
         [DisplayName("Price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         [Required(ErrorMessage = "The Status is Reqired")]
         [DisplayName("Status")]
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
 
 
 
