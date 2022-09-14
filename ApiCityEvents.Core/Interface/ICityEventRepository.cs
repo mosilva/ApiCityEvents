@@ -1,9 +1,4 @@
 ﻿using ApiCityEvents.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ApiCityEvents.Core.Interface
 {
@@ -13,6 +8,20 @@ namespace ApiCityEvents.Core.Interface
 
         bool CheckConflictCityEventInsert(CityEvent cityEvent);
 
+        bool CheckIfExistsCityEventForId(int index);
+
+        bool UpdateCityEvent(int index, CityEvent cityEvent);
+
+        bool UpdateCityEvent(int index, bool status);
+
+        bool CheckIfExistsReservationForCityEvent(int index);
+
+        bool DeleteCityEvent(int index);
+        List<CityEvent> QueryCityEvent(string title);
+
+        List<CityEvent> QueryCityEvent(string local, string date);
+
+        List<CityEvent> QueryCityEvent(decimal inicialPrice, decimal finalPrice, string date);
 
     }
 }

@@ -7,6 +7,7 @@ namespace ApiCityEvents.Controllers
     [ApiController]
     [Route("[controller]")]
     [Consumes("application/json")]
+    [Produces("application/json")]
     public class CityEventsController : ControllerBase
     {
 
@@ -19,14 +20,14 @@ namespace ApiCityEvents.Controllers
             _cityEventService = cityEventService;
         }
 
-
         [HttpPost("/CreateNewCityEvent")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<CityEvent> CreateCityEvent(CityEvent cityEvent)
         {
-            if (!(_cityEventService.CheckConflictCityEventInsert(cityEvent)))
+            if (!(_cityEventService.CheckExictsCityEvent(cityEvent)))
             {
                 return Conflict();
             }
@@ -40,65 +41,129 @@ namespace ApiCityEvents.Controllers
 
         }
 
-
-        [HttpGet("/Title/{nameTitle}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-        public ActionResult QueryForTitle(string nameTitle)
-        {
-            //return Ok();
-
-            return Ok(cityEvent);
-
-        }
-
-
-        [HttpGet("/Event/{local}/{date}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult QueryForLocalAndDate(string local, DateTime date)
-        {
-            //return Ok();
-
-            return Ok(cityEvent);
-
-        }
-
-        [HttpGet("/Event")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult QueryForRangePriceAndDate(
-              decimal inicialPrice
-            , decimal finalPrice
-            , DateTime date)
-        {
-            //return Ok();
-
-            return Ok(cityEvent);
-
-        }
-
-
-
-
         [HttpPut("/UpdateCityEventAllInformation")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult UpdateCityEventComplete(int index)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult UpdateCityEventComplete(int index, CityEvent cityEvent)
         {
+            if (_cityEventService.CheckExictsCityEvent(index))
+            {
+                return NotFound();
+            }
+
+           if(!(_cityEventService.UpdateCityEvent(index, cityEvent)))
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
+            return NoContent();
+        }
+
+        [HttpPatch("/UpdateCityEventStatus")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        public ActionResult UpdateCityEventStatus(int index, bool status)
+        {
+            if (_cityEventService.CheckExictsCityEvent(index))
+            {
+                return NotFound();
+            }
+
+            if (!(_cityEventService.UpdateCityEvent(index, status)))
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
             return NoContent();
         }
 
         [HttpDelete("/DeletedEventNoReservations/InactiveEventWithReservations")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<CityEvent> DeleteCityEvent(int index)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult DeleteCityEvent(int index)
         {
-            return Ok(cityEvent);
+            if (_cityEventService.CheckExictsCityEvent(index))
+            {
+                return NotFound();
+            }
+
+            if (_cityEventService.CheckExictsReservationForCityEvent(index))
+            {
+                _cityEventService.UpdateCityEvent(index, false);
+                return NoContent();
+            }
+
+            if (!(_cityEventService.DeleteCityEvent(index)))
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok();
         }
 
+        [HttpGet("/Title/{nameTitle}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<List<CityEvent>> QueryForTitle(string nameTitle)
+        {
+            var listCityEvent = _cityEventService.SelectCityEvent(nameTitle);
 
+            if (!(listCityEvent.Any()))
+            {
+                return NotFound();
+            }
 
+            return Ok(listCityEvent);
+
+        }
+
+        [HttpGet("/ForLocalAndDateFormatdd/MM/yyyy")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult QueryForLocalAndDate(string local, string date)
+        {
+            var listCityEvent = _cityEventService.SelectCityEvent(local, date);
+
+            if (!(listCityEvent.Any()))
+            {
+                return NotFound();
+            }
+
+            return Ok(listCityEvent);
+
+        }
+
+        [HttpGet("/ForRangePriceAndDateFormatdd/MM/yyyy")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult QueryForRangePriceAndDate(
+              decimal inicialPrice
+            , decimal finalPrice
+            , string date)
+        {
+            var listCityEvent = _cityEventService.SelectCityEvent(inicialPrice, finalPrice, date);
+
+            if (!(listCityEvent.Any()))
+            {
+                return NotFound();
+            }
+
+            return Ok(listCityEvent);
+
+        }
     }
 }

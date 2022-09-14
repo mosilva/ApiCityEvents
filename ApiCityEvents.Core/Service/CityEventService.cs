@@ -1,14 +1,9 @@
 ﻿using ApiCityEvents.Core.Interface;
 using ApiCityEvents.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ApiCityEvents.Core.Service
 {
-    public class CityEventService :ICityEventService
+    public class CityEventService : ICityEventService
     {
         private readonly ICityEventRepository _cityEventRepository;
 
@@ -25,6 +20,48 @@ namespace ApiCityEvents.Core.Service
         public bool CheckExictsCityEvent(CityEvent cityEvent)
         {
             return _cityEventRepository.CheckConflictCityEventInsert(cityEvent);
+        }
+
+        public bool CheckExictsCityEvent(int index)
+        {
+            return _cityEventRepository.CheckIfExistsCityEventForId(index);
+        }
+
+        public bool UpdateCityEvent(int index, CityEvent cityEvent)
+        {
+            return _cityEventRepository.UpdateCityEvent(index, cityEvent);
+        }
+
+        public bool UpdateCityEvent(int index, bool status)
+        {
+            return _cityEventRepository.UpdateCityEvent(index, status);
+        }
+
+        public bool CheckExictsReservationForCityEvent(int index)
+        {
+            return _cityEventRepository.CheckIfExistsReservationForCityEvent(index);
+        }
+
+        public bool DeleteCityEvent(int index)
+        {
+            return _cityEventRepository.DeleteCityEvent(index);
+        }
+
+        public List<CityEvent> SelectCityEvent(string title)
+        {
+            return _cityEventRepository.QueryCityEvent(title);
+        }
+
+        public List<CityEvent> SelectCityEvent(string local, string date)
+        {
+            return _cityEventRepository.QueryCityEvent(local, date);
+        }
+
+        public List<CityEvent> SelectCityEvent(decimal inicialPrice
+            , decimal finalPrice
+            , string date)
+        {
+            return _cityEventRepository.QueryCityEvent(inicialPrice, finalPrice, date);
         }
 
     }
