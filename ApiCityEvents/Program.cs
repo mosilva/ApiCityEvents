@@ -1,6 +1,7 @@
 using ApiCityEvents.Core.Interface;
 using ApiCityEvents.Core.Service;
 using ApiCityEvents.Data.Repository;
+using ApiCityEvents.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +12,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add<LogAuthorizationGenerateCode>();
+    options.Filters.Add<GeneralExceptionFilter>();
+});
+
 builder.Services.AddScoped<ICityEventRepository, CityEventRepository>();
 builder.Services.AddScoped<ICityEventService, CityEventService>();
+builder.Services.AddScoped<LogActionFilterCheckExictsCityEventForId>();
 
 var app = builder.Build();
 

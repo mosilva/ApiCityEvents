@@ -1,5 +1,6 @@
 using ApiCityEvents.Core.Interface;
 using ApiCityEvents.Core.Model;
+using ApiCityEvents.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCityEvents.Controllers
@@ -10,7 +11,6 @@ namespace ApiCityEvents.Controllers
     [Produces("application/json")]
     public class CityEventsController : ControllerBase
     {
-
         public CityEvent cityEvent;
 
         private readonly ICityEventService _cityEventService;
@@ -25,6 +25,7 @@ namespace ApiCityEvents.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         public ActionResult<CityEvent> CreateCityEvent(CityEvent cityEvent)
         {
             if (!(_cityEventService.CheckExictsCityEvent(cityEvent)))
@@ -45,14 +46,12 @@ namespace ApiCityEvents.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [ServiceFilter(typeof(LogActionFilterCheckExictsCityEventForId))]
         public ActionResult UpdateCityEventComplete(int index, CityEvent cityEvent)
         {
-            if (_cityEventService.CheckExictsCityEvent(index))
-            {
-                return NotFound();
-            }
-
            if(!(_cityEventService.UpdateCityEvent(index, cityEvent)))
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -65,15 +64,12 @@ namespace ApiCityEvents.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [ServiceFilter(typeof(LogActionFilterCheckExictsCityEventForId))]
         public ActionResult UpdateCityEventStatus(int index, bool status)
         {
-            if (_cityEventService.CheckExictsCityEvent(index))
-            {
-                return NotFound();
-            }
-
             if (!(_cityEventService.UpdateCityEvent(index, status)))
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -87,14 +83,12 @@ namespace ApiCityEvents.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [ServiceFilter(typeof(LogActionFilterCheckExictsCityEventForId))]
         public ActionResult DeleteCityEvent(int index)
         {
-            if (_cityEventService.CheckExictsCityEvent(index))
-            {
-                return NotFound();
-            }
-
             if (_cityEventService.CheckExictsReservationForCityEvent(index))
             {
                 _cityEventService.UpdateCityEvent(index, false);
@@ -114,6 +108,7 @@ namespace ApiCityEvents.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         public ActionResult<List<CityEvent>> QueryForTitle(string nameTitle)
         {
             var listCityEvent = _cityEventService.SelectCityEvent(nameTitle);
@@ -132,6 +127,7 @@ namespace ApiCityEvents.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         public ActionResult QueryForLocalAndDate(string local, string date)
         {
             var listCityEvent = _cityEventService.SelectCityEvent(local, date);
@@ -150,6 +146,7 @@ namespace ApiCityEvents.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         public ActionResult QueryForRangePriceAndDate(
               decimal inicialPrice
             , decimal finalPrice
