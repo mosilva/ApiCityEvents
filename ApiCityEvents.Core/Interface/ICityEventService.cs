@@ -16,8 +16,8 @@ namespace ApiCityEvents.Core.Interface
         bool DeleteCityEvent(int index);
         List<CityEvent> SelectCityEvent(string title);
 
-        List<CityEvent> SelectCityEvent(string local, string date);
+        List<CityEvent> SelectCityEvent(string local, DateTime date);
 
-        List<CityEvent> SelectCityEvent(decimal inicialPrice, decimal finalPrice, string date);
+        List<CityEvent> SelectCityEvent(decimal inicialPrice, decimal finalPrice, DateTime date);
     }
 }

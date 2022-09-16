@@ -52,14 +52,14 @@ namespace ApiCityEvents.Core.Service
             return _cityEventRepository.QueryCityEvent(title);
         }
 
-        public List<CityEvent> SelectCityEvent(string local, string date)
+        public List<CityEvent> SelectCityEvent(string local, DateTime date)
         {
             return _cityEventRepository.QueryCityEvent(local, date);
         }
 
         public List<CityEvent> SelectCityEvent(decimal inicialPrice
             , decimal finalPrice
-            , string date)
+            , DateTime date)
         {
             return _cityEventRepository.QueryCityEvent(inicialPrice, finalPrice, date);
         }

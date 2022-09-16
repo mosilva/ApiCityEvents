@@ -167,7 +167,7 @@ namespace ApiCityEvents.Data.Repository
             return SelectCityEvent;
         }
 
-        public List<CityEvent> QueryCityEvent(string local, string date)
+        public List<CityEvent> QueryCityEvent(string local, DateTime date)
         {
             var query = "SELECT * FROM CityEvent WHERE " +
                 "Local LIKE @Local " +
@@ -185,7 +185,7 @@ namespace ApiCityEvents.Data.Repository
 
         public List<CityEvent> QueryCityEvent(decimal inicialPrice
             , decimal finalPrice
-            , string date)
+            , DateTime date)
         {
             var query = "SELECT * FROM CityEvent WHERE " +
                 "(Price BETWEEN @inicialPrice AND @finalPrice) " +
@@ -201,7 +201,5 @@ namespace ApiCityEvents.Data.Repository
 
             return conn.Query<CityEvent>(query, parameters).ToList();
         }
-
-
     }
 }

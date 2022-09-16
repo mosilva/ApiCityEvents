@@ -29,6 +29,10 @@ namespace ApiCityEvents.Filters
                     context.HttpContext.Response.StatusCode = StatusCodes.Status501NotImplemented;
                     context.Result = new ObjectResult(problem);
                     break;
+                case System.Data.SqlClient.SqlException:
+                    context.HttpContext.Response.StatusCode = StatusCodes.Status501NotImplemented;
+                    context.Result = new ObjectResult(problem);
+                    break;
                 default:
                     context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     context.Result = new ObjectResult(problem);

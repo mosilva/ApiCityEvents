@@ -41,9 +41,5 @@ namespace ApiCityEvents.Core.Model
         [Required(ErrorMessage = "The Status is Reqired")]
         [DisplayName("Status")]
         public bool? Status { get; set; }
-
-
-
-
     }
 }

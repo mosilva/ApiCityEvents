@@ -1,6 +1,7 @@
 using ApiCityEvents.Core.Interface;
 using ApiCityEvents.Core.Model;
 using ApiCityEvents.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCityEvents.Controllers
@@ -23,9 +24,12 @@ namespace ApiCityEvents.Controllers
         [HttpPost("/CreateNewCityEvent")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [Authorize(Roles = "admin")]
         public ActionResult<CityEvent> CreateCityEvent(CityEvent cityEvent)
         {
             if (!(_cityEventService.CheckExictsCityEvent(cityEvent)))
@@ -45,11 +49,14 @@ namespace ApiCityEvents.Controllers
         [HttpPut("/UpdateCityEventAllInformation")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [ServiceFilter(typeof(LogActionFilterCheckExictsCityEventForId))]
+        [Authorize(Roles = "admin")]
         public ActionResult UpdateCityEventComplete(int index, CityEvent cityEvent)
         {
            if(!(_cityEventService.UpdateCityEvent(index, cityEvent)))
@@ -63,11 +70,14 @@ namespace ApiCityEvents.Controllers
         [HttpPatch("/UpdateCityEventStatus")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [ServiceFilter(typeof(LogActionFilterCheckExictsCityEventForId))]
+        [Authorize(Roles = "admin")]
         public ActionResult UpdateCityEventStatus(int index, bool status)
         {
             if (!(_cityEventService.UpdateCityEvent(index, status)))
@@ -82,11 +92,14 @@ namespace ApiCityEvents.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [ServiceFilter(typeof(LogActionFilterCheckExictsCityEventForId))]
+        [Authorize(Roles = "admin")]
         public ActionResult DeleteCityEvent(int index)
         {
             if (_cityEventService.CheckExictsReservationForCityEvent(index))
@@ -122,13 +135,13 @@ namespace ApiCityEvents.Controllers
 
         }
 
-        [HttpGet("/ForLocalAndDateFormatdd/MM/yyyy")]
+        [HttpGet("/ForLocalAndDateFormatyyyy/MM/dd")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        public ActionResult QueryForLocalAndDate(string local, string date)
+        public ActionResult QueryForLocalAndDate(string local, DateTime date)
         {
             var listCityEvent = _cityEventService.SelectCityEvent(local, date);
 
@@ -141,7 +154,7 @@ namespace ApiCityEvents.Controllers
 
         }
 
-        [HttpGet("/ForRangePriceAndDateFormatdd/MM/yyyy")]
+        [HttpGet("/ForRangePriceAndDateFormatyyyy/MM/dd")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -150,7 +163,7 @@ namespace ApiCityEvents.Controllers
         public ActionResult QueryForRangePriceAndDate(
               decimal inicialPrice
             , decimal finalPrice
-            , string date)
+            , DateTime date)
         {
             var listCityEvent = _cityEventService.SelectCityEvent(inicialPrice, finalPrice, date);
 
