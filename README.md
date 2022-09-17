@@ -4,6 +4,10 @@
 
 ![ApiCityEvents](https://user-images.githubusercontent.com/48559533/190871773-95b3ba48-04c4-4dd0-b53b-2f6b31f921ff.jpg)
 
+# JWT
+
+![JWT](https://user-images.githubusercontent.com/48559533/190871945-0c863d9d-4a0c-4254-b818-5fe223080ee0.png)
+
 # Create tables - Database
 
 CREATE TABLE CityEvent
