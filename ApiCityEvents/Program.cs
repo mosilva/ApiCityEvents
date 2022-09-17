@@ -24,7 +24,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidIssuer = "APIClientes.com",
-            ValidAudience = "APIEvents.com" 
+            ValidAudience = "APIEvents.com"
         };
     });
 
@@ -48,7 +48,7 @@ builder.Services.AddSwaggerGen(setup =>
     };
 
     setup.AddSecurityDefinition(
-jwtSecurityScheme.Reference.Id
+  jwtSecurityScheme.Reference.Id
 , jwtSecurityScheme);
 
     setup.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -73,7 +73,10 @@ builder.Services.AddScoped<ICityEventService, CityEventService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IEventReservationRepository, EventReservationRepository>();
+builder.Services.AddScoped<IEventReservationService, EventReservationService>();
 builder.Services.AddScoped<LogActionFilterCheckExictsCityEventForId>();
+
 
 var app = builder.Build();
 

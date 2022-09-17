@@ -7,8 +7,8 @@ namespace ApiCityEvents.Core.Model
     {
         //public long IdReservation { get; set; }
 
-        [Required(ErrorMessage = "The Id Event is Required")]
-        public long? IdEvent { get; set; }
+        //[Required(ErrorMessage = "The Id Event is Required")]
+        //public long? IdEvent { get; set; }
 
         [Required(ErrorMessage = "The Person Name is Required", AllowEmptyStrings = false)]
         [StringLength(100, MinimumLength = 3)]
