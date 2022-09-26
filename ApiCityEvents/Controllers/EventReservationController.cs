@@ -12,6 +12,7 @@ namespace ApiCityEvents.Controllers
     [Produces("application/json")]
     public class EventReservationController : ControllerBase
     {
+
         private readonly IEventReservationService _eventReservationService;
 
         public EventReservationController(IEventReservationService eventReservationService)
